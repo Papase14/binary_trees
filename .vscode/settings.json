@@ -1,6 +1,7 @@
 {
     "files.associations": {
-        "stddef.h": "c"
+        "stddef.h": "c",
+        "*.c#enhance_code": "c"
     },
     "C_Cpp.errorSquiggles": "disabled"
 }
