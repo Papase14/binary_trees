@@ -1,68 +1,50 @@
 #include "binary_trees"
 
+
 /**
- * heap_insert - Inserts a new node with the given value into a
- * binaryheap represented by a binary tree.
- * Ensures that the binary heap property is maintained after
- * the insertion.
+ * heap_insert - Inserts a new node with the given value into a binary heap
+ * represented by a binary tree.
+ * The function ensures that the binary heap property is maintained
+ * after the insertion,
+ * which means that the parent node is always greater than or equal
+ * to its children nodes.
  *
  * @root: A double pointer to the root node of the binary tree
  * representing the binary heap.
  * @value: The value to be inserted as a new node in the binary heap.
  *
- * Return A pointer to the newly inserted node in the binary heap.
+ * Return: A pointer to the new node that has been inserted into the binary heap.
  */
 heap_t *heap_insert(heap_t **root, int value)
 {
-	if (root == NULL)
-		return NULL;
+	heap_t *tree, *new, *flip;
+	int size, leaves, sub, bit, level, tmp;
 
-	if (*root == NULL)
-	{
-		*root = binary_tree_node(NULL, value);
-		return *root;
-	}
-
-	heap_t *tree = *root;
-	int size = binary_tree_size(tree);
-	int leaves = size, sub = 1, level = 0, bit, tmp;
-
-	while (leaves >= sub)
-	{
+	if (!root)
+		return (NULL);
+	if (!(*root))
+		return (*root = binary_tree_node(NULL, value));
+	tree = *root;
+	size = binary_tree_size(tree);
+	leaves = size;
+	for (level = 0, sub = 1; leaves >= sub; sub *= 2, level++)
 		leaves -= sub;
-		sub *= 2;
-		level++;
-	}
 
-	bit = 1 << (level - 1);
+	for (bit = 1 << (level - 1); bit != 1; bit >>= 1)
+		tree = leaves & bit ? tree->right : tree->left;
 
-	while (bit != 1)
-	{
-		if (leaves & bit)
-			tree = tree->right;
-		else
-			tree = tree->left;
-		bit >>= 1;
-	}
+	new = binary_tree_node(tree, value);
+	leaves & 1 ? (tree->right = new) : (tree->left = new);
 
-	heap_t *new = binary_tree_node(tree, value);
-
-	if (leaves & 1)
-		tree->right = new;
-	else
-		tree->left = new;
-
-	heap_t *flip = new;
-
-	while (flip->parent && (flip->n > flip->parent->n))
+	flip = new;
+	for (; flip->parent && (flip->n > flip->parent->n); flip = flip->parent)
 	{
 		tmp = flip->n;
 		flip->n = flip->parent->n;
 		flip->parent->n = tmp;
-		flip = flip->parent;
+		new = new->parent;
 	}
-
-	return new;
+	return (new);
 }
 
 /**
