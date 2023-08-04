@@ -52,10 +52,4 @@ binary_tree_t *binary_tree_uncle(binary_tree_t *node);
 binary_tree_t *binary_trees_ancestor(const binary_tree_t *first, const binary_tree_t *second);
 void binary_tree_levelorder(const binary_tree_t *tree, void (*func)(int));
 
-bst_t *bst_search(const bst_t *tree, int value);
-
-heap_insert(heap_t **root, int value);
-heap_t *array_to_heap(int *array, size_t size);
-
-
 #endif
